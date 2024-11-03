@@ -39,14 +39,14 @@ def execute_command():
             # Initialize the SSH client
             client = paramiko.SSHClient()
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            client.connect(hostname='172.20.93.118', port=22, username=data['username'], password=data['userpass'], timeout=10)
+            client.connect(hostname=ip, port=22, username=data['username'], password=data['userpass'], timeout=10)
 
             # Execute the command
             stdin, stdout, stderr = client.exec_command(command)
             result = stdout.read().decode('utf-8')
             error = stderr.read().decode('utf-8')
-            print('result:', result)
-            print('error:', error)
+            # print('result:', result)
+            # print('error:', error)
 
             # Close the SSH connection
             client.close()
@@ -63,4 +63,4 @@ def execute_command():
     return jsonify(results)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
