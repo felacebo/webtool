@@ -1,15 +1,32 @@
+    // 从文本中提取IP地址的函数
+    function extractIPs(text) {
+        // IPv4地址正则表达式
+        const ipRegex = /\b(?:\d{1,3}\.){3}\d{1,3}\b/g;
+        const matches = text.match(ipRegex) || [];
+        
+        // 去重并验证IP地址的有效性
+        const uniqueIPs = [...new Set(matches)];
+        return uniqueIPs.filter(ip => {
+            const parts = ip.split('.').map(Number);
+            return parts.length === 4 && parts.every(part => part >= 0 && part <= 255);
+        });
+    }
+
     function parseIPsBackEnd() {
         const ipInput = document.getElementById('ipInput');
-        ips = ipInput.value.split('\n').map(ip => ip.trim()).filter(ip => ip);
+        const text = ipInput.value;
+        const extractedIPs = extractIPs(text);
+        
         fetch('/parse-ip-text', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ ips: ips })
+            body: JSON.stringify({ ips: extractedIPs })
         })
         .then(response => response.json())
         .then(data => {
+            // 更新IP输入框，只显示提取到的IP地址
             const ipInput = document.getElementById('ipInput');
             ipInput.value = data[0].ips.join('\n')
             parseIPs()
@@ -19,17 +36,28 @@
 
     function parseIPs() {
         const ipInput = document.getElementById('ipInput');
-        let ips = ipInput.value.split('\n').map(ip => ip.trim()).filter(ip => ip);
+        const text = ipInput.value;
+        const ips = extractIPs(text);
         const ipButtons = document.getElementById('ipButtons');
         ipButtons.innerHTML = '';
 
-        ips.forEach(ip => {
-            const button = document.createElement('button');
-            button.textContent = `Execute on ${ip}`;
-            button.className = 'ip-button';
-            button.onclick = function() { executeOneCommand([ip]); };
-            ipButtons.appendChild(button);
-        });
+        // 如果提取到IP，显示IP按钮
+        if (ips.length > 0) {
+            ips.forEach(ip => {
+                const button = document.createElement('button');
+                button.textContent = `Execute on ${ip}`;
+                button.className = 'ip-button';
+                button.onclick = function() { executeOneCommand([ip]); };
+                ipButtons.appendChild(button);
+            });
+        } else {
+            // 如果没有提取到IP，显示提示信息
+            const noIPMessage = document.createElement('p');
+            noIPMessage.textContent = '未提取到有效IP地址';
+            noIPMessage.style.color = '#666';
+            noIPMessage.style.fontStyle = 'italic';
+            ipButtons.appendChild(noIPMessage);
+        }
     }
 
     function executeAllCommands() {

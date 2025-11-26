@@ -11,15 +11,19 @@ def entry_page() -> 'html':
 def entry_test() -> 'html':
     return render_template('test.html')
 
-@app.route('/toremote')
+@app.route('/to_remote')
 def entry_page3() -> 'html':
     return render_template('remote_access.html')
+
+@app.route('/to_quick_config')
+def entry_quick_config() -> 'html':
+    return render_template('quick_config.html')
 
 @app.route('/parse-ip-text', methods=['POST'])
 def pares_ip_text():
     data = request.json
     ips = data['ips']
-    ips.append('8.8.8.8')
+    ips.append('172.20.93.118')
     results = []
     results.append({'ips': ips})
     print(results)
@@ -45,8 +49,8 @@ def execute_command():
             stdin, stdout, stderr = client.exec_command(command)
             result = stdout.read().decode('utf-8')
             error = stderr.read().decode('utf-8')
-            # print('result:', result)
-            # print('error:', error)
+            print('result:', result)
+            print('error:', error)
 
             # Close the SSH connection
             client.close()
@@ -63,4 +67,4 @@ def execute_command():
     return jsonify(results)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)
