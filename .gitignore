@@ -1,0 +1,53 @@
+# Python相关
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# 虚拟环境
+venv/
+env/
+ENV/
+.venv
+
+# IDE相关
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 操作系统相关
+.DS_Store
+Thumbs.db
+
+# Flask相关
+instance/
+.webassets-cache
+
+# 日志文件
+*.log
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 配置文件（如包含敏感信息）
+config_local.py
+.env
+
+# 编译文件
+*.pyc
+*.pyo
+
+# 测试相关
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 打包文件
+dist/
+build/
+*.egg-info/

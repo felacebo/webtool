@@ -1,0 +1,12 @@
+# WebTool - 远程设备管理工具
+# Python依赖包列表
+
+# Flask核心
+Flask==2.3.3
+Werkzeug==2.3.7
+
+# SSH远程连接
+paramiko==3.3.1
+
+# 其他依赖
+cryptography==41.0.4

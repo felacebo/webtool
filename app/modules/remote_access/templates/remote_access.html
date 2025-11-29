@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Access</title>
+    <link rel="stylesheet" href="{{ url_for('remote_access.static', filename='remote_access.css') }}">
+    <script src="{{ url_for('remote_access.static', filename='remote_access.js') }}"></script>
+</head>
+<body>
+    <div>
+        <div class="containerinput">
+            <div class="containerip">
+                <h3>请输入IP-用户名-密码</h3>
+                <div class="containeripinner">
+                    <div class="left-block">
+                    <textarea id="ipInput" class="ipInputClass" rows="6" placeholder="Enter IPs, one per line"></textarea>
+                    </div>
+                    <div class="right-block">
+                        <button onclick="parseIPsBackEnd()">Parse IP</button>
+                        <br>
+                        <input type="text" id="user_name" class="userinfo" placeholder="Username">
+                        <input type="text" id="user_pwd" class="userinfo" placeholder="Password">
+                        <br>
+                        <button onclick="preUser1()">user1</button>
+                        <button onclick="preUser2()">user2</button>
+                        <button onclick="preUser3()">user3</button>
+                        <button onclick="preUser4()">user4</button>
+                    </div>
+                </div>
+            </div>
+            <div class="containercmd">
+                <h3>请输入本次执行的命令</h3>
+                <input type="text" id="userCommand" class="userCmdCls" placeholder="Enter user command">
+                <br>
+                <button onclick="preCmd1()">cmd1</button>
+                <button onclick="preCmd2()">cmd2</button>
+                <button onclick="preCmd3()">cmd3</button>
+                <button onclick="preCmd4()">cmd4</button>
+                <button onclick="preCmd5()">cmd5</button>
+                <button onclick="preCmd6()">cmd6</button>
+                <br>
+                <button onclick="executeAllCommands()">为所有IP执行命令</button>
+                <button onclick="clearResults()">清空输出</button>
+            </div>
+        </div>
+
+        <div id="ipButtons" class="ip-button-container"></div>
+        <div id="progressContainer" class="progress-container">
+            <div id="progressBar" class="progress-bar">0%</div>
+        </div>
+        <div id="result"></div>
+    </div>
+</body>
+</html>

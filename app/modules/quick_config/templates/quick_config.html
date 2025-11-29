@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickConfig - 快速配置工具</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('quick_config.static', filename='quick_config.css') }}">
+    <script src="{{ url_for('remote_access.static', filename='remote_access.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>QuickConfig - 快速配置工具</h1>
+        <nav>
+            <a href="/" class="nav-link">返回主页</a>
+            <a href="/to_remote" class="nav-link">远程访问</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- 左侧IP输入区域 -->
+            <div class="panel ip-panel">
+                <h2>设备管理</h2>
+                <div class="form-group">
+                    <label for="ipInput">IP地址列表（每行一个）</label>
+                    <textarea id="ipInput" rows="8" placeholder="输入IP地址，每行一个&#10;例如：&#10;192.168.1.1&#10;192.168.1.2&#10;192.168.1.3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user_name">用户名</label>
+                    <input type="text" id="user_name" placeholder="输入用户名">
+                </div>
+                
+                <div class="form-group">
+                    <label for="user_pwd">密码</label>
+                    <input type="password" id="user_pwd" placeholder="输入密码">
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="parseIPsBackEnd()" class="btn btn-primary">解析IP</button>
+                    <button onclick="clearInputs()" class="btn btn-secondary">清空</button>
+                </div>
+                
+                <div class="preset-section">
+                    <h3>预设用户</h3>
+                    <div class="preset-buttons">
+                        <button onclick="preUser1()" class="btn btn-preset">用户1</button>
+                        <button onclick="preUser2()" class="btn btn-preset">用户2</button>
+                        <button onclick="preUser3()" class="btn btn-preset">用户3</button>
+                        <button onclick="preUser4()" class="btn btn-preset">用户4</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中间配置选项区域 -->
+            <div class="panel config-panel">
+                <h2>配置选项</h2>
+                
+                <div class="form-group">
+                    <label for="configType">配置类型</label>
+                    <select id="configType">
+                        <option value="network">网络配置</option>
+                        <option value="ssh">SSH配置</option>
+                        <option value="firewall">防火墙配置</option>
+                        <option value="custom">自定义命令</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userCommand">命令/配置内容</label>
+                    <textarea id="userCommand" rows="4" placeholder="输入要执行的命令或配置内容"></textarea>
+                </div>
+                
+                <div class="preset-section">
+                    <h3>预设命令</h3>
+                    <div class="preset-buttons">
+                        <button onclick="preCmd1()" class="btn btn-preset">查看日期</button>
+                        <button onclick="preCmd2()" class="btn btn-preset">SSH配置</button>
+                        <button onclick="preCmd3()" class="btn btn-preset">网络状态</button>
+                        <button onclick="preCmd4()" class="btn btn-preset">磁盘使用</button>
+                        <button onclick="preCmd5()" class="btn btn-preset">内存使用</button>
+                        <button onclick="preCmd6()" class="btn btn-preset">CPU负载</button>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="executeAllCommands()" class="btn btn-success">执行配置</button>
+                    <button onclick="executeSelected()" class="btn btn-warning">执行选中</button>
+                </div>
+            </div>
+
+            <!-- 右侧结果显示区域 -->
+            <div class="panel result-panel">
+                <div class="result-header">
+                    <h2>执行结果</h2>
+                    <button onclick="clearResults()" class="btn btn-danger">清空结果</button>
+                </div>
+                
+                <div id="ipButtons" class="ip-button-container"></div>
+                
+                <div class="progress-section">
+                    <div id="progressContainer" class="progress-container">
+                        <div id="progressBar" class="progress-bar">0%</div>
+                    </div>
+                </div>
+                
+                <div id="result" class="result-content"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 QuickConfig 快速配置工具</p>
+    </footer>
+
+    <script>
+        // 额外的JavaScript功能
+        function clearInputs() {
+            document.getElementById('ipInput').value = '';
+            document.getElementById('user_name').value = '';
+            document.getElementById('user_pwd').value = '';
+            document.getElementById('ipButtons').innerHTML = '';
+        }
+        
+        function executeSelected() {
+            const selectedIPs = [];
+            const buttons = document.querySelectorAll('#ipButtons button.selected');
+            buttons.forEach(button => {
+                const ip = button.textContent.replace('Execute on ', '').replace(' (Selected)', '');
+                selectedIPs.push(ip);
+            });
+            
+            if (selectedIPs.length === 0) {
+                alert('请先选择要执行的IP地址');
+                return;
+            }
+            
+            executeCommand(selectedIPs);
+        }
+        
+        // 修改parseIPs函数，添加选择功能
+        const originalParseIPs = parseIPs;
+        parseIPs = function() {
+            originalParseIPs();
+            
+            // 添加选择功能
+            const buttons = document.querySelectorAll('#ipButtons button');
+            buttons.forEach(button => {
+                button.onclick = function() {
+                    this.classList.toggle('selected');
+                    if (this.classList.contains('selected')) {
+                        this.textContent = this.textContent.replace('Execute on ', '').replace(' (Selected)', '') + ' (Selected)';
+                    } else {
+                        this.textContent = 'Execute on ' + this.textContent.replace('Execute on ', '').replace(' (Selected)', '');
+                    }
+                };
+            });
+        };
+    </script>
+</body>
+</html>
