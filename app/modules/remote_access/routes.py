@@ -1,6 +1,6 @@
 """远程访问路由"""
 from flask import Blueprint, render_template, request, jsonify
-from .services import SSHService
+from app.utils.ssh_service import SSHService
 
 # 创建蓝图
 remote_access_bp = Blueprint(

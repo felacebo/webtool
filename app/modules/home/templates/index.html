@@ -15,106 +15,205 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
             overflow-x: hidden; /* Prevents horizontal scrollbar */
         }
         header {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
             text-align: center;
             padding: 20px 0;
             width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 30px;
         }
         header h1 {
-            font-size: 4rem; /* Increased font size */
-            color: #3f51b5;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* Text shadow for depth */
-            background: linear-gradient(45deg, #3f51b5, #9c27b0); /* Gradient background */
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent; /* Make text color transparent to show the gradient */
+            font-size: 2.5rem;
             margin: 0;
-            animation: moveIn 2s ease-in-out infinite alternate; /* Animation */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
-        @keyframes moveIn {
-            0% {
-                transform: translateY(0);
-            }
-            100% {
-                transform: translateY(-10px);
-            }
+        .sections-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            width: 90%;
+            max-width: 1200px;
+            gap: 20px;
+            margin-bottom: 40px;
         }
-        nav {
-            margin-top: 100px; /* Space for the title */
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 40px; /* Space between nav and main content */
+        .section {
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            padding: 15px 30px;
-            border-radius: 25px; /* Rounded corners */
-            background: linear-gradient(45deg, #3f51b5, #9c27b0);
-            margin: 0 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .section-title {
+            font-size: 1.3rem;
+            color: #3f51b5;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #3f51b5;
         }
-        nav a:hover, nav a:focus {
-            background: linear-gradient(135deg, #3f51b5, #9c27b0);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+        .remote-access-section {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
         }
-        nav a:active {
+        .config-section {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
+        .tools-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        .coming-soon-section {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .config-section .services-grid,
+        .remote-access-section .services-grid {
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        }
+        .service-card {
+            background: white;
+            border-radius: 5px;
+            padding: 10px 12px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .service-card:hover {
             transform: translateY(-1px);
-            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        .service-card h3 {
+            margin: 0 0 4px 0;
+            font-size: 1rem;
+            color: #333;
+        }
+        .service-card p {
+            font-size: 0.8rem;
+            color: #666;
+            margin: 4px 0;
+        }
+        .service-link {
+            display: inline-block;
+            padding: 5px 12px;
+            background: linear-gradient(45deg, #3f51b5, #9c27b0);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-top: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+        .service-link:hover {
+            background: linear-gradient(135deg, #3f51b5, #9c27b0);
+            transform: scale(1.02);
+        }
+        .placeholder-card {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px dashed #ccc;
+            color: #666;
+            font-style: italic;
         }
         main {
-            max-width: 600px;
-            text-align: center;
-        }
-        main h1 {
-            font-size: 2.5rem;
-            margin: 20px 0;
-        }
-        main p {
-            font-size: 1rem;
-            color: #757575;
-            margin: 20px 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         footer {
             background: #9e9e9e;
             color: #fff;
             padding: 10px 0;
-            position: absolute;
-            bottom: 0;
             width: 100%;
             text-align: center;
-            height: 30px;
+            margin-top: auto;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 768px) {
+            .sections-container {
+                grid-template-columns: 1fr;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>这是一个工具网站</h1>
+        <h1>工具网站导航</h1>
     </header>
 
-    <nav>
-        <a href="to_remote" class="nav-link">远程访问</a>
-        <a href="to_quick_config" class="nav-link">QuickConfig</a>
-        <a href="to_test" class="nav-link">Test</a>
-        <a href="" class="nav-link">敬请期待</a>
-    </nav>
-
     <main>
-        <p>点击上方的链接访问子页面。</p>
+        <div class="sections-container">
+            <!-- 远程访问区域 -->
+            <div class="section remote-access-section">
+                <h2 class="section-title">远程访问</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>远程访问</h3>
+                        <p>访问远程设备和服务</p>
+                        <a href="to_remote" class="service-link">进入</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 配置类功能区域 -->
+            <div class="section config-section">
+                <h2 class="section-title">配置管理</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>快速配置</h3>
+                        <p>快速配置工具</p>
+                        <a href="to_quick_config" class="service-link">进入</a>
+                    </div>
+                    <div class="service-card">
+                        <h3>快速环境配置</h3>
+                        <p>环境参数设置</p>
+                        <a href="to_quick_env_config" class="service-link">进入</a>
+                    </div>
+                    <div class="service-card">
+                        <h3>快速业务配置</h3>
+                        <p>业务参数设置</p>
+                        <a href="to_quick_business_config" class="service-link">进入</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 其他工具区域 -->
+            <div class="section tools-section">
+                <h2 class="section-title">其他工具</h2>
+                <div class="services-grid">
+                    <div class="service-card placeholder-card">
+                        <h3>更多工具</h3>
+                        <p>即将推出更多实用工具</p>
+                        <a href="#" class="service-link">敬请期待</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 敬请期待区域 -->
+            <div class="section coming-soon-section">
+                <h2 class="section-title">敬请期待</h2>
+                <div class="services-grid">
+                    <div class="service-card placeholder-card">
+                        <h3>新功能开发中</h3>
+                        <p>我们正在努力开发新功能</p>
+                        <a href="#" class="service-link">敬请期待</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
+    <footer>
+        <p>&copy; 2023 工具网站. 保留所有权利.</p>
+    </footer>
 </body>
 </html>

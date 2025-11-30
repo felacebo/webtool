@@ -15,11 +15,13 @@ def create_app():
     from app.modules.home.routes import home_bp
     from app.modules.remote_access.routes import remote_access_bp
     from app.modules.quick_config.routes import quick_config_bp
+    from app.modules.quick_config.quickconfig import quickconfig_bp
     from app.modules.test.routes import test_bp
     
     app.register_blueprint(home_bp)
     app.register_blueprint(remote_access_bp)
     app.register_blueprint(quick_config_bp)
+    app.register_blueprint(quickconfig_bp)
     app.register_blueprint(test_bp)
     
     return app
