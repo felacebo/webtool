@@ -40,23 +40,53 @@
         const ips = extractIPs(text);
         const ipButtons = document.getElementById('ipButtons');
         ipButtons.innerHTML = '';
-
-        // 如果提取到IP，显示IP按钮
+        
+        // 显示解析出的IP，最多5个
+        const parsedIPsContainer = document.getElementById('parsedIPs');
+        parsedIPsContainer.innerHTML = '';
+        
         if (ips.length > 0) {
-            ips.forEach(ip => {
+            // 显示最多5个IP
+            const maxIPsToShow = 5;
+            const displayIPs = ips.slice(0, maxIPsToShow);
+            
+            displayIPs.forEach(ip => {
+                const ipItem = document.createElement('div');
+                ipItem.className = 'parsed-ip-item';
+                ipItem.textContent = ip;
+                parsedIPsContainer.appendChild(ipItem);
+                
+                // 创建执行按钮
                 const button = document.createElement('button');
                 button.textContent = `Execute on ${ip}`;
                 button.className = 'ip-button';
                 button.onclick = function() { executeOneCommand([ip]); };
                 ipButtons.appendChild(button);
             });
+            
+            // 如果有超过5个IP，显示提示
+            if (ips.length > maxIPsToShow) {
+                const moreIPsMessage = document.createElement('div');
+                moreIPsMessage.style.fontSize = '0.8rem';
+                moreIPsMessage.style.color = '#666';
+                moreIPsMessage.style.marginTop = '8px';
+                moreIPsMessage.style.textAlign = 'center';
+                moreIPsMessage.textContent = `共${ips.length}个IP，仅显示前${maxIPsToShow}个`;
+                parsedIPsContainer.appendChild(moreIPsMessage);
+            }
         } else {
             // 如果没有提取到IP，显示提示信息
             const noIPMessage = document.createElement('p');
             noIPMessage.textContent = '未提取到有效IP地址';
             noIPMessage.style.color = '#666';
             noIPMessage.style.fontStyle = 'italic';
-            ipButtons.appendChild(noIPMessage);
+            parsedIPsContainer.appendChild(noIPMessage);
+            
+            const noIPButtonsMessage = document.createElement('p');
+            noIPButtonsMessage.textContent = '未提取到有效IP地址';
+            noIPButtonsMessage.style.color = '#666';
+            noIPButtonsMessage.style.fontStyle = 'italic';
+            ipButtons.appendChild(noIPButtonsMessage);
         }
     }
 

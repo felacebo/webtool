@@ -6,42 +6,51 @@
     <title>EnvConfig - 环境配置工具</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('quick_config.static', filename='quick_config.css') }}">
-    <script src="{{ url_for('remote_access.static', filename='remote_access.js') }}"></script>
+    <script src="{{ url_for('quick_config.static', filename='env_config.js') }}"></script>
 </head>
 <body>
     <header>
         <h1>EnvConfig - 环境配置工具</h1>
         <nav>
-            <a href="/" class="nav-link">返回主页</a>
-            <a href="/to_quick_config" class="nav-link">快速配置</a>
-            <a href="/to_biz_config" class="nav-link">业务配置</a>
-            <a href="/to_remote" class="nav-link">远程访问</a>
+            <!-- 移除导航链接 -->
         </nav>
     </header>
 
     <main>
         <div class="container">
-            <!-- 左侧IP输入区域 -->
+            <!-- 左侧环境输入区域 -->
             <div class="panel ip-panel">
-                <h2>环境配置管理</h2>
-                <div class="form-group">
-                    <label for="ipInput">IP地址列表（每行一个）</label>
-                    <textarea id="ipInput" rows="8" placeholder="输入IP地址，每行一个&#10;例如：&#10;192.168.1.1&#10;192.168.1.2&#10;192.168.1.3"></textarea>
+                <h2>环境输入</h2>
+                
+                <!-- 用户输入环境信息框 -->
+                <div class="input-section">
+                    <h3>环境信息输入</h3>
+                    <div class="form-group">
+                        <textarea id="ipInput" rows="4" placeholder="输入IP地址"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="user_name">用户名</label>
+                            <input type="text" id="user_name" placeholder="输入用户名">
+                        </div>
+                        
+                        <div class="form-group half-width">
+                            <label for="user_pwd">密码</label>
+                            <input type="text" id="user_pwd" placeholder="输入密码">
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button onclick="parseIPsBackEnd()" class="btn btn-primary">解析IP</button>
+                        <button onclick="clearInputs()" class="btn btn-secondary">清空</button>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="user_name">用户名</label>
-                    <input type="text" id="user_name" placeholder="输入用户名">
-                </div>
-                
-                <div class="form-group">
-                    <label for="user_pwd">密码</label>
-                    <input type="password" id="user_pwd" placeholder="输入密码">
-                </div>
-                
-                <div class="button-group">
-                    <button onclick="parseIPsBackEnd()" class="btn btn-primary">解析IP</button>
-                    <button onclick="clearInputs()" class="btn btn-secondary">清空</button>
+                <!-- 解析出的环境IP展示 -->
+                <div class="parsed-ips-section">
+                    <h3>解析出的环境IP（最多5个）</h3>
+                    <div id="parsedIPs" class="parsed-ips-container"></div>
                 </div>
                 
                 <div class="preset-section">
@@ -55,52 +64,26 @@
                 </div>
             </div>
 
-            <!-- 中间配置选项区域 -->
+            <!-- 中间执行配置区域 -->
             <div class="panel config-panel">
-                <h2>环境配置选项</h2>
-                
-                <div class="form-group">
-                    <label for="configType">配置类型</label>
-                    <select id="configType">
-                        <option value="system">系统环境</option>
-                        <option value="network">网络环境</option>
-                        <option value="storage">存储环境</option>
-                        <option value="security">安全环境</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="userCommand">环境配置命令</label>
-                    <textarea id="userCommand" rows="4" placeholder="输入要执行的环境配置命令"></textarea>
-                </div>
-                
-                <div class="preset-section">
-                    <h3>预设环境配置</h3>
-                    <div class="preset-buttons">
-                        <button onclick="preCmd1()" class="btn btn-preset">安装依赖</button>
-                        <button onclick="preCmd2()" class="btn btn-preset">配置网络</button>
-                        <button onclick="preCmd3()" class="btn btn-preset">设置时区</button>
-                        <button onclick="preCmd4()" class="btn btn-preset">更新系统</button>
-                        <button onclick="preCmd5()" class="btn btn-preset">配置防火墙</button>
-                        <button onclick="preCmd6()" class="btn btn-preset">设置用户权限</button>
-                    </div>
-                </div>
-                
+                <h2>执行配置</h2>                
                 <div class="button-group">
                     <button onclick="executeAllCommands()" class="btn btn-success">执行配置</button>
-                    <button onclick="executeSelected()" class="btn btn-warning">执行选中</button>
+                    <button onclick="preCmd1()" class="btn btn-preset">安装依赖</button>
+                    <button onclick="preCmd2()" class="btn btn-preset">配置网络</button>
+                    <button onclick="preCmd3()" class="btn btn-preset">设置时区</button>
+                    <button onclick="preCmd4()" class="btn btn-preset">更新系统</button>
+                    <button onclick="preCmd5()" class="btn btn-preset">配置防火墙</button>
+                    <button onclick="preCmd6()" class="btn btn-preset">设置权限</button>
                 </div>
             </div>
 
-            <!-- 右侧结果显示区域 -->
+            <!-- 右侧输出区域 -->
             <div class="panel result-panel">
                 <div class="result-header">
-                    <h2>执行结果</h2>
-                    <button onclick="clearResults()" class="btn btn-danger">清空结果</button>
+                    <h2>输出</h2>
+                    <button onclick="clearResults()" class="btn btn-danger">清空</button>
                 </div>
-                
-                <div id="ipButtons" class="ip-button-container"></div>
-                
                 <div class="progress-section">
                     <div id="progressContainer" class="progress-container">
                         <div id="progressBar" class="progress-bar">0%</div>
@@ -116,49 +99,6 @@
         <p>© 2024 EnvConfig 环境配置工具</p>
     </footer>
 
-    <script>
-        // 额外的JavaScript功能
-        function clearInputs() {
-            document.getElementById('ipInput').value = '';
-            document.getElementById('user_name').value = '';
-            document.getElementById('user_pwd').value = '';
-            document.getElementById('ipButtons').innerHTML = '';
-        }
-        
-        function executeSelected() {
-            const selectedIPs = [];
-            const buttons = document.querySelectorAll('#ipButtons button.selected');
-            buttons.forEach(button => {
-                const ip = button.textContent.replace('Execute on ', '').replace(' (Selected)', '');
-                selectedIPs.push(ip);
-            });
-            
-            if (selectedIPs.length === 0) {
-                alert('请先选择要执行的IP地址');
-                return;
-            }
-            
-            executeCommand(selectedIPs);
-        }
-        
-        // 修改parseIPs函数，添加选择功能
-        const originalParseIPs = parseIPs;
-        parseIPs = function() {
-            originalParseIPs();
-            
-            // 添加选择功能
-            const buttons = document.querySelectorAll('#ipButtons button');
-            buttons.forEach(button => {
-                button.onclick = function() {
-                    this.classList.toggle('selected');
-                    if (this.classList.contains('selected')) {
-                        this.textContent = this.textContent.replace('Execute on ', '').replace(' (Selected)', '') + ' (Selected)';
-                    } else {
-                        this.textContent = 'Execute on ' + this.textContent.replace('Execute on ', '').replace(' (Selected)', '');
-                    }
-                };
-            });
-        };
-    </script>
+
 </body>
 </html>
